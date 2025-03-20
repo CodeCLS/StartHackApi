@@ -49,6 +49,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(payload);
+        System.out.println("52"  + jsonNode + " " + lastMessageTime + " " +textMessage);
 
         String channel = jsonNode.get("channel").asText();
         String content = jsonNode.get("content").asText();
@@ -58,6 +59,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         } else {
             voiceMessage = voiceMessage + " " + content;
         }
+        System.out.println("62"  + jsonNode + " " + lastMessageTime + " " +textMessage + " " + voiceMessage + " " + channel + " " + content);
+
+
+
     }
 
     @Override
@@ -73,6 +78,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void checkInactivity() {
+        System.out.println("81"  + " " + lastMessageTime + " " +textMessage);
+
         Instant now = Instant.now();
         long secondsSinceLastMessage = Duration.between(lastMessageTime, now).getSeconds();
 
@@ -93,16 +100,22 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
                 "as possible. Here is a snipped of our last conversation: " + message;
 
         List<String> geminiResponse = promptApiRepo.callGeminiAPI(toGemini);
+        System.out.println("103"  + " " + lastMessageTime + " " +textMessage);
 
         String combinedString = String.join(" ", geminiResponse);
+        System.out.println("106"  + " " + lastMessageTime + " " +textMessage);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString;
         try {
+            System.out.println("111"  + " " + lastMessageTime + " " +textMessage);
+
             jsonString = objectMapper.writeValueAsString(Map.of("content", combinedString));
             System.out.println(jsonString);
             sendMessageToClient(jsonString);
         } catch (IOException e) {
+            System.out.println("117"  + " " + lastMessageTime + " " +textMessage);
+
             throw new RuntimeException(e);
         }
     }

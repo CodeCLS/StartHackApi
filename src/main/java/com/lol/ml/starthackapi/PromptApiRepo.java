@@ -33,6 +33,8 @@ public class PromptApiRepo {
                 .url(fullUrl)
                 .post(body)
                 .build();
+        System.out.println("36I");
+
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
