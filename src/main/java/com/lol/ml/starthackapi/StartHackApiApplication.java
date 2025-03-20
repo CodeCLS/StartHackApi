@@ -5,7 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,10 +21,17 @@ public class StartHackApiApplication {
 
     public StartHackApiApplication(PromptApiRepo geminiRepository) {
         this.geminiRepository = geminiRepository;
+
     }
 
     public static void main(String[] args) {
         SpringApplication.run(StartHackApiApplication.class, args);
+        SpringApplication app = new SpringApplication(StartHackApiApplication.class);
+        Map<String, Object> config = new HashMap<>();
+        String port = System.getenv("PORT");
+        config.put("server.port", port != null ? port : "8080"); // Default to 8080 if PORT is not set
+        app.setDefaultProperties(config);
+        app.run(args);
     }
 
     @GetMapping("/ask_ai")
