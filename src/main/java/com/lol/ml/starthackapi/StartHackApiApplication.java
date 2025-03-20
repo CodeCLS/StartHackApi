@@ -25,20 +25,24 @@ public class StartHackApiApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(StartHackApiApplication.class);
-        Map<String, Object> properties = new HashMap<>();
-
-        String port = System.getenv("PORT"); // Get Heroku's assigned port
-        if (port == null) {
-            port = "8080"; // Default for local testing
-        }
-
-        System.out.println("⚡ Starting application on port: " + port);
-        properties.put("server.port", port);
-        app.setDefaultProperties(properties);
-
-        app.run(args);
+        SpringApplication.run(StartHackApiApplication.class, args);
     }
+
+    //public static void main(String[] args) {
+    //    SpringApplication app = new SpringApplication(StartHackApiApplication.class);
+    //    Map<String, Object> properties = new HashMap<>();
+//
+    //    String port = System.getenv("PORT"); // Get Heroku's assigned port
+    //    if (port == null) {
+    //        port = "8080"; // Default for local testing
+    //    }
+//
+    //    System.out.println("⚡ Star ting application on port: " + port);
+    //    properties.put("server.port", port);
+    //    app.setDefaultProperties(properties);
+//
+    //    app.run(args);
+    //}
 
 
     @GetMapping("/ask_ai")
