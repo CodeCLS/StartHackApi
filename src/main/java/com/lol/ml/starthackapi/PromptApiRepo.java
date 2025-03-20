@@ -80,7 +80,7 @@ public class PromptApiRepo {
 
             return outputChunks;
         } catch (Exception e) {
-            System.out.println("51I");
+            System.out.println("51I " + e.getMessage());
 
             throw new RuntimeException("Error calling Gemini API: " + e.getMessage());
         }
