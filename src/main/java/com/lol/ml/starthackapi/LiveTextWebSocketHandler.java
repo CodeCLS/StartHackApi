@@ -1,6 +1,7 @@
 package com.lol.ml.starthackapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -77,6 +78,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    @Scheduled(fixedRate = 5000)
     private void checkInactivity() {
         System.out.println("81"  + " " + lastMessageTime + " " +textMessage);
 
