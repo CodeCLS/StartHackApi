@@ -43,11 +43,10 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-tasks.withType(Jar).configureEach {
+tasks.named('bootJar') {
     manifest {
         attributes(
-                'Main-Class': 'com.lol.ml.starthackapi.StartHackApiApplication' // Ersetze dies mit deiner Main-Klasse
+                'Main-Class': 'com.lol.ml.starthackapi.Application'
         )
     }
 }
@@ -55,3 +54,5 @@ tasks.withType(Jar).configureEach {
 
 
 
+
+//1
