@@ -38,6 +38,8 @@ public class PromptApiRepo {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
+                System.out.println("41I");
+
                 throw new RuntimeException("API Error: " + response.code() + " - " + response.message());
             }
 
@@ -45,6 +47,7 @@ public class PromptApiRepo {
             String jsonResponse = response.body().string();
             JSONObject jsonObject = new JSONObject(jsonResponse);
             List<String> outputChunks = new ArrayList<>();
+            System.out.println("50I");
 
             // Extract AI-generated text
             JSONArray candidates = jsonObject.getJSONArray("candidates");
@@ -52,8 +55,11 @@ public class PromptApiRepo {
                 JSONObject firstCandidate = candidates.getJSONObject(0);
                 JSONObject content = firstCandidate.getJSONObject("content");
                 JSONArray parts = content.getJSONArray("parts");
+                System.out.println("58I");
 
                 if (parts.length() > 0) {
+                    System.out.println("41I");
+
                     String aiResponse = parts.getJSONObject(0).getString("text");
 
                     // Split response into sentences for chunking
@@ -64,6 +70,8 @@ public class PromptApiRepo {
                         output.append(chunk);
 
                     }
+                    System.out.println("80I");
+
                     String importance = determineImportance("");
                     String formattedChunk = "{type: \"text\", importance: \"" + importance + "\", content: \"" + output.toString() + "\"}";
                     outputChunks.add(formattedChunk);
@@ -72,6 +80,8 @@ public class PromptApiRepo {
 
             return outputChunks;
         } catch (Exception e) {
+            System.out.println("51I");
+
             throw new RuntimeException("Error calling Gemini API: " + e.getMessage());
         }
     }
