@@ -7,8 +7,9 @@ group = 'com.lol.ml'
 version = '0.0.1-SNAPSHOT'
 
 bootJar {
-    mainClass = 'com.lol.ml.starthackapi.StartHackApiApplication'
+    mainClass = 'com.lol.ml.starthackapi.Application'
 }
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21)) // Change to your version
@@ -30,9 +31,7 @@ dependencies {
     implementation 'org.json:json:20240303' // Latest version of org.json
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'io.projectreactor:reactor-core:3.6.0' // Latest Reactor version
-    // Google AI SDK (GCP AI Platform)
     implementation 'com.google.cloud:google-cloud-aiplatform:3.36.0'
-    // WebSocketConfigurer
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     implementation ('org.springframework.boot:spring-boot-starter') {
@@ -43,16 +42,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-tasks.named('bootJar') {
-    manifest {
-        attributes(
-                'Main-Class': 'com.lol.ml.starthackapi.Application'
-        )
-    }
-}
-
-
-
-
-
-//1
