@@ -7,7 +7,7 @@ group = 'com.lol.ml'
 version = '0.0.1-SNAPSHOT'
 
 bootJar {
-    mainClass = 'com.lol.ml.starthackapi.StartHackApplication'
+    mainClass = 'com.lol.ml.starthackapi.Application'
 }
 
 java {
