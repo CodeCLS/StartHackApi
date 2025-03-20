@@ -26,19 +26,20 @@ configurations.configureEach {
 dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // ✅ Use only one: `spring-boot-starter-web` for Servlet-based apps
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    implementation 'org.json:json:20240303' // Latest version of org.json
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'io.projectreactor:reactor-core:3.6.0' // Latest Reactor version
+    implementation 'org.json:json:20240303'
     implementation 'com.google.cloud:google-cloud-aiplatform:3.36.0'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
 
     implementation ('org.springframework.boot:spring-boot-starter') {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()
