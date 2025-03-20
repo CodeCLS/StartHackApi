@@ -7,7 +7,7 @@ group = 'com.lol.ml'
 version = '0.0.1-SNAPSHOT'
 
 bootJar {
-    mainClass = 'com.lol.ml.starthackapi.Application'
+    mainClass = 'com.lol.ml.starthackapi.StartHackApplication'
 }
 
 java {
@@ -33,6 +33,7 @@ dependencies {
     implementation 'io.projectreactor:reactor-core:3.6.0' // Latest Reactor version
     implementation 'com.google.cloud:google-cloud-aiplatform:3.36.0'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
     implementation ('org.springframework.boot:spring-boot-starter') {
         exclude group: 'commons-logging', module: 'commons-logging'

@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api")
+@SpringBootApplication
 public class StartHackApiApplication {
 
     private final PromptApiRepo geminiRepository;
