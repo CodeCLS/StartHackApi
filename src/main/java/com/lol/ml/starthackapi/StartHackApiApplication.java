@@ -5,7 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,11 +21,25 @@ public class StartHackApiApplication {
 
     public StartHackApiApplication(PromptApiRepo geminiRepository) {
         this.geminiRepository = geminiRepository;
+
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(StartHackApiApplication.class, args);
+        SpringApplication app = new SpringApplication(StartHackApiApplication.class);
+        Map<String, Object> properties = new HashMap<>();
+
+        String port = System.getenv("PORT"); // Get Heroku's assigned port
+        if (port == null) {
+            port = "8080"; // Default for local testing
+        }
+
+        System.out.println("⚡ Starting application on port: " + port);
+        properties.put("server.port", port);
+        app.setDefaultProperties(properties);
+
+        app.run(args);
     }
+
 
     @GetMapping("/ask_ai")
     public ResponseEntity<String> askAi(@RequestParam String text) {
