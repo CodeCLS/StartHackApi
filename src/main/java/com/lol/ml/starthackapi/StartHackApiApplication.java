@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@SpringBootApplication
 @RestController
 @RequestMapping("/api")
+@SpringBootApplication
 public class StartHackApiApplication {
 
     private final PromptApiRepo geminiRepository;
