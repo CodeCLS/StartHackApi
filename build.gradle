@@ -28,6 +28,8 @@ dependencies {
     implementation 'io.projectreactor:reactor-core:3.6.0' // Latest Reactor version
     // Google AI SDK (GCP AI Platform)
     implementation 'com.google.cloud:google-cloud-aiplatform:3.36.0'
+    // WebSocketConfigurer
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
