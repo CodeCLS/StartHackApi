@@ -9,12 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSocket
-<<<<<<< HEAD
 public class WebSocketConfig implements WebSocketConfigurer, WebMvcConfigurer {
-
-=======
-public class WebSocketConfig implements WebSocketConfigurer{
->>>>>>> 8a93245564068652ed412c4a68f4d9463240a6bf
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new LiveTextWebSocketHandler(), "/live-text")
