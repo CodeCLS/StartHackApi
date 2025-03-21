@@ -148,7 +148,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         try {
             checkAndProcessConversation(sessionId);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("Error processing conversation: " + e.getMessage());
         }
 
     }
