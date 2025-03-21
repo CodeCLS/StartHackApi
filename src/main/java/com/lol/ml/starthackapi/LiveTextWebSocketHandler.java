@@ -206,7 +206,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
         String toGemini = "We would like you to make a Prediction of the next Question our customer could" +
                 " ask us. If possible it should be in the financial context. Please keep it as short and precise" +
-                " as possible and also answer it in the same way(short, concise). Here is a snippet of our last conversation: " + currentVoiceMessage;
+                " as possible and also answer it in the same way(short, concise).  Here is a snippet of our last conversation: " + currentVoiceMessage;
 
         List<String> geminiResponse = promptApiRepo.callGeminiAPI(toGemini);
 
