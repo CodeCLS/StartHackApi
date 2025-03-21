@@ -226,9 +226,14 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
         System.out.println("voice: " + currentVoiceMessage);
 
-        String toGemini = "We would like you to make a Prediction of the next Question our customer could" +
-                " ask us. If possible it should be in the financial context. Please keep it as short and precise" +
-                " as possible and also answer it in the same way(short, concise).  Here is a snippet of our last conversation: " + currentVoiceMessage;
+        String toGemini = "You are chatting with a Wealth Manager, so please only answer the following " +
+                "prompt only if it has something to do with finances. If not you should always respond: " +
+                "Gathering Information. -> We would like " +
+                "you to make a Prediction of the next Question our customer could" +
+                " ask us. Please keep it as short and precise" +
+                " as possible and also provide a short and precise answer. Please do not use any emojis or" +
+                "square/curly braces and start the question with Q: and the answer with A: " +
+                "-> Here is a snippet of our last conversation: " + currentVoiceMessage;
 
         List<String> geminiResponse = promptApiRepo.callGeminiAPI(toGemini);
 
