@@ -227,8 +227,9 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         System.out.println("voice: " + currentVoiceMessage);
 
         String toGemini = "You are chatting with a Wealth Manager, so please only answer the following " +
-                "prompt only if it has something to do with finances. If not you should always respond: " +
-                "Gathering Information. -> We would like " +
+                "prompt only if it has something to do with finances. If that is not the case you should always respond what I will give" +
+                "you in round brackets now: " +
+                "(Gathering Information.) -> We would like " +
                 "you to make a Prediction of the next Question our customer could" +
                 " ask us. Please keep it as short and precise" +
                 " as possible and also provide a short and precise answer. Please do not use any emojis or" +
@@ -238,6 +239,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         List<String> geminiResponse = promptApiRepo.callGeminiAPI(toGemini);
 
         String combinedString = String.join(" ", geminiResponse);
+
+        if(currentVoiceMessage.isBlank()){
+            combinedString = "Gathering Information";
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString;
