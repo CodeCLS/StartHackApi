@@ -73,8 +73,7 @@ public class PromptApiRepo {
                     }
                     System.out.println("80I");
 
-                    String importance = determineImportance("");
-                    String formattedChunk = "{type: \"text\", importance: \"" + importance + "\", content: \"" + output.toString() + "\"}";
+                    String formattedChunk = output.toString();
                     outputChunks.add(formattedChunk);
                 }
             }
@@ -88,13 +87,5 @@ public class PromptApiRepo {
     }
 
     // Function to determine importance level based on content length or keywords
-    private String determineImportance(String chunk) {
-        if (chunk.length() > 100 || chunk.contains("key aspect") || chunk.contains("important")) {
-            return "very";
-        } else if (chunk.length() > 50) {
-            return "medium";
-        } else {
-            return "low";
-        }
-    }
+
 }
