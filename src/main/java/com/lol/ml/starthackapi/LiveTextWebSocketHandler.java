@@ -68,6 +68,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
     @Scheduled(fixedRate = 15000, initialDelay = 15000)
     private void returnPrediction (){
+        if(session == null || !session.isOpen()){
+            return;
+        }
+
         String toGemini = "We would like you to make a Prediction of the next Question our customer could" +
                 "ask us. If possible it should be in the financial context. Please keep it as shortly and precisely" +
                 "as possible. Here is a snipped of our last conversation: " + voiceMessage;
