@@ -20,9 +20,10 @@ public class ConversationProcessor {
     }
 
     public boolean shouldProcessConversation(String sessionId) {
-        Long lastTime = lastMessageTime.get(sessionId);
-        return lastTime != null &&
-                (System.currentTimeMillis() - lastTime) >= PAUSE_THRESHOLD;
+        return true;
+        //Long lastTime = lastMessageTime.get(sessionId);
+        //return lastTime != null &&
+        //        (System.currentTimeMillis() - lastTime) >= PAUSE_THRESHOLD;
     }
 
     public String getConversation(String sessionId) {

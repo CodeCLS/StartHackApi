@@ -77,7 +77,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         }
         String channel = jsonNode.get("channel").asText();
         String content = jsonNode.get("content").asText();
-
+        //TODO change addWOrd for conversation because we get whole sentence
         // Process word by word
         conversationProcessor.addWord(sessionId, word);
 
