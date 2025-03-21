@@ -198,6 +198,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
+        System.out.println("voice" + voiceMessage);
         String toGemini = "We would like you to make a Prediction of the next Question our customer could" +
                 "ask us. If possible it should be in the financial context. Please keep it as shortly and precisely" +
                 "as possible. Here is a snipped of our last conversation: " + voiceMessage;
