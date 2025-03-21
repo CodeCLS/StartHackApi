@@ -42,9 +42,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        LiveTextWebSocketHandler.session = session;
+        this.session = session;
         System.out.println("Connection to session " + session.getId() + " established.");
-        String sessionId = session.getId();
 
 
 
