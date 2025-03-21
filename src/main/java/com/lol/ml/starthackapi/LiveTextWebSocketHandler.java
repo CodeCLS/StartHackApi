@@ -137,7 +137,11 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
         if(rawResponse.contains("unable") || rawResponse.contains("assist") || rawResponse.contains("queries") || rawResponse.contains("Error")){
             System.out.println("Unable to assist");
-            response = String.join(" ", geminiRepo.callGeminiAPI(message));
+            String toGemini = "You are chatting with a Wealth Manager, so please only answer the following " +
+                    "prompt only if it has something to do with finances. If not you should always " +
+                    "respond: I am sorry. I cannot help you with that. I am trained to assist a wealth manager " +
+                    "with financial questions. -> Following you have my prompt: " + message;
+            response = String.join(" ", geminiRepo.callGeminiAPI(toGemini));
         } else {
             response = rawResponse.substring(0,10);
         }
