@@ -1,6 +1,7 @@
 package com.lol.ml.starthackapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.auth.oauth2.GoogleAuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,9 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-@EnableScheduling
+import java.util.Random;
 
+@EnableScheduling
 @Component
 public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -158,11 +160,44 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     }
     private void returnChat(){
         try {
-            checkAndProcessConversation(sessionId);
+            checkAndProcessConversation(session.getId());
         } catch (Exception e) {
             System.out.println("Error processing conversation: " + e.getMessage());
         }
 
+    }
+
+    @Scheduled(fixedRate = 10000)
+    private void returnClient(){
+        if(session == null || !session.isOpen()){
+            return;
+        }
+
+        String name = "David Lang";
+        String age = "37";
+        String description;
+
+        int randomNumber = new Random().nextInt(3) + 1;
+
+        if(randomNumber == 1){
+            description = "Invested in Google";
+        } else if (randomNumber == 2) {
+            description = "Likes BioTech";
+        } else {
+            description = "FCLiverpool Fan";
+        }
+
+        String combinedString = String.join("|", List.of(name, age, description));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString;
+        try {
+            jsonString = objectMapper.writeValueAsString(Map.of("content", combinedString, "tag", "client"));
+            System.out.println(jsonString);
+            sendMessageToClient(jsonString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Scheduled(fixedRate = 15000, initialDelay = 15000)
