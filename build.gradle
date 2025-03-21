@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.3'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.lol.ml'
@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21)) // Change to your version
+        languageVersion.set(JavaLanguageVersion.of(19))
     }
 }
 
@@ -18,18 +18,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    implementation 'org.json:json:20240303' // Latest version of org.json
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'io.projectreactor:reactor-core:3.6.0' // Latest Reactor version
-    // Google AI SDK (GCP AI Platform)
-    implementation 'com.google.cloud:google-cloud-aiplatform:3.36.0'
-    // WebSocketConfigurer
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'org.json:json:20240303'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
