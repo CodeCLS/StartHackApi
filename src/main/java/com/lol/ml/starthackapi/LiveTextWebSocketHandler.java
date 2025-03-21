@@ -46,6 +46,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         System.out.println("Connection to session " + session.getId() + " established.");
         String sessionId = session.getId();
 
+
+
         // Send mock client info
         JSONObject clientInfo = new JSONObject(clientService.getClientById("client1"));
         session.sendMessage(new TextMessage(clientInfo.toString()));
@@ -83,7 +85,11 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         } else {
             voiceMessage = voiceMessage + " " + content;
         }
+
         System.out.println("62"  + jsonNode + " " +textMessage + " " + voiceMessage + " " + channel + " " + content);
+
+
+
 
     }
 
@@ -104,7 +110,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String jsonString;
                 try {
-                    jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "explained"));
+                    jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "chat"));
                     System.out.println(jsonString);
                     sendMessageToClient(jsonString);
                 } catch (IOException e) {
