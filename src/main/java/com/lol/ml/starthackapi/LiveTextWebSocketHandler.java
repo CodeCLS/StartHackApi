@@ -78,7 +78,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 20000)
     private void checkInactivity() {
         System.out.println("81"  + " " + lastMessageTime + " " +textMessage);
 
