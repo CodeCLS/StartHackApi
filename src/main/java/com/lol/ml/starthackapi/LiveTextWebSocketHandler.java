@@ -50,18 +50,6 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
 
 
-        // Send mock client info
-//        JSONObject clientInfo = new JSONObject(clientService.getClientById("client1"));
-//        session.sendMessage(new TextMessage(clientInfo.toString()));
-
-
-        //
-
-
-        //String json = "{\"channel\": \"textchannel\", \"content\": \"textcontent\"}";
-
-
-
 
     }
 
@@ -144,18 +132,26 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         String response = sixRepo.getResponse(message);
 
         if(response.contains("unable") || response.contains("assist") || response.contains("queries")){
+            System.out.println("Unable to assist");
             String rawResponse = String.join(" ", geminiRepo.callGeminiAPI(message));
             response = rawResponse.substring(0,10);
         }
+        System.out.println("Una12ble to assist");
+
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString;
         try {
+            System.out.println("Unable 412to assist" + objectMapper);
+
             jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "chat"));
             System.out.println(jsonString);
             sendMessageToClient(jsonString);
+            System.out.println("Unable to assist" + jsonString);
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Unable to assist" + e.getMessage());
+
         }
     }
 
@@ -171,6 +167,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
     public void sendMessageToClient(String message) throws IOException {
         if (session != null && session.isOpen()) {
+            System.out.println("Unable to send message");
+
             session.sendMessage(new TextMessage(message));
         }
     }
