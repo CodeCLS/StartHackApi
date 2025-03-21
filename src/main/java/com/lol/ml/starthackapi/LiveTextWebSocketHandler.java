@@ -104,6 +104,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
             String conversation = conversationProcessor.getConversation(sessionId);
 
             if (!conversation.isEmpty()) {
+                System.out.println("109" + conversation);
+
                 String response;
                 if (conversationProcessor.isFinancialQuery(conversation)) {
                     // Use SIX API for financial queries
