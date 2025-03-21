@@ -129,6 +129,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 //    }
 
     private void checkAndProcessConversation (String message){
+        System.out.println("Una12ble312 to assist");
+
         String response = sixRepo.getResponse(message);
 
         if(response.contains("unable") || response.contains("assist") || response.contains("queries")){
@@ -147,10 +149,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
             jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "chat"));
             System.out.println(jsonString);
             sendMessageToClient(jsonString);
-            System.out.println("Unable to assist" + jsonString);
+            System.out.println("Unable to assis141t" + jsonString);
 
         } catch (IOException e) {
-            System.out.println("Unable to assist" + e.getMessage());
+            System.out.println("Unable to ass2ist" + e.getMessage());
 
         }
     }
