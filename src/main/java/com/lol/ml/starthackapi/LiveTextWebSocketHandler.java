@@ -228,16 +228,12 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
         String toGemini = "You are chatting with a Wealth Manager, so please only answer the following " +
                 "prompt only if it has something to do with finances. If that is not the case you should always respond" +
-                "Gathering Information. -> Prompt: We would like you to give us really short and precise background" +
+                "Gathering Information. -> Prompt: We would like you to give us 2-3 short and precise sentences on the background" +
                 "information on the most important keywords that you can find in the following: " + currentVoiceMessage;
 
         List<String> geminiResponse = promptApiRepo.callGeminiAPI(toGemini);
 
         String combinedString = String.join(" ", geminiResponse);
-
-        if(currentVoiceMessage.isBlank()){
-            combinedString = "Gathering Information";
-        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString;
@@ -273,10 +269,6 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         List<String> geminiResponse = promptApiRepo.callGeminiAPI(toGemini);
 
         String combinedString = String.join(" ", geminiResponse);
-
-        if(currentVoiceMessage.isBlank()){
-            combinedString = "Gathering Information";
-        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString;
