@@ -91,6 +91,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
 
 
+        returnChat();
+
 
     }
 
@@ -142,8 +144,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
             session.sendMessage(new TextMessage(message));
         }
     }
-    @Scheduled(fixedRate = 15000, initialDelay = 15000)
-    private void returnExplained(){
+    private void returnChat(){
         try {
             checkAndProcessConversation(sessionId);
         } catch (Exception e) {
