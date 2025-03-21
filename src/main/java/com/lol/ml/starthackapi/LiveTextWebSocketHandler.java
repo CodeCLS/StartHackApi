@@ -82,7 +82,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         //conversationProcessor.addWord(sessionId, word);
 
         if(channel.equals("text")) {
-            checkAndProcessConversation(content);
+            //checkAndProcessConversation(content);
         } else {
             voiceMessage = voiceMessage + " " + content;
         }
@@ -139,9 +139,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    private void checkAndProcessConversation (String message){
-        String sixResponse =
-    }
+//    private void checkAndProcessConversation (String message){
+//        String sixResponse = sixRepo.getResponse(message);
+//        String geminiResponse = String.join(" ", geminiRepo.callGeminiAPI(message));
+//    }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
