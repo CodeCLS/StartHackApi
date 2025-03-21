@@ -39,19 +39,17 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     private PromptApiRepo geminiRepo = new PromptApiRepo();
 
     private SixRepo sixRepo = new SixRepo();
-    String sessionId = null;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        this.session = session;
-        sessionId = session.getId();
+        LiveTextWebSocketHandler.session = session;
         System.out.println("Connection to session " + session.getId() + " established.");
 
 
 
         // Send mock client info
-        JSONObject clientInfo = new JSONObject(clientService.getClientById("client1"));
-        session.sendMessage(new TextMessage(clientInfo.toString()));
+//        JSONObject clientInfo = new JSONObject(clientService.getClientById("client1"));
+//        session.sendMessage(new TextMessage(clientInfo.toString()));
 
 
         //
@@ -69,7 +67,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         String sessionId = session.getId();
         String word = message.getPayload();
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = null;
+        JsonNode jsonNode;
         try {
             jsonNode = objectMapper.readTree(word);
         } catch (JsonProcessingException e) {
@@ -145,11 +143,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        String sessionId = session.getId();
         System.out.println("Connection to session " + sessionId + " closed.");
-        LiveTextWebSocketHandler.session = null;
         conversationProcessor.clearConversation(sessionId);
-        sessionId = null;
-
+        LiveTextWebSocketHandler.session = null;
     }
 
 
