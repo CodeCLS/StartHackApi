@@ -66,7 +66,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String sessionId = session.getId();
+        //String sessionId = session.getId();
         String word = message.getPayload();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode;
@@ -79,24 +79,20 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         String content = jsonNode.get("content").asText();
         //TODO change addWOrd for conversation because we get whole sentence
         // Process word by word
-        conversationProcessor.addWord(sessionId, word);
+        //conversationProcessor.addWord(sessionId, word);
 
         if(channel.equals("text")) {
-            textMessage = textMessage + " " + content;
+            checkAndProcessConversation(content);
         } else {
             voiceMessage = voiceMessage + " " + content;
         }
 
         System.out.println("62"  + jsonNode + " " +textMessage + " " + voiceMessage + " " + channel + " " + content);
-
-
-
-        returnChat();
-
-
     }
 
-    private void checkAndProcessConversation(String sessionId) throws Exception {
+    private void checkAndProcessConversation(String message) throws Exception {
+        String sessionId = session.getId();
+
         System.out.println("100");
 
         if (conversationProcessor.shouldProcessConversation(sessionId)) {
@@ -143,6 +139,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    private void checkAndProcessConversation (String message){
+        String sixResponse =
+    }
+
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         String sessionId = session.getId();
@@ -157,14 +157,6 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         if (session != null && session.isOpen()) {
             session.sendMessage(new TextMessage(message));
         }
-    }
-    private void returnChat(){
-        try {
-            checkAndProcessConversation(session.getId());
-        } catch (Exception e) {
-            System.out.println("Error processing conversation: " + e.getMessage());
-        }
-
     }
 
     @Scheduled(fixedRate = 10000)
