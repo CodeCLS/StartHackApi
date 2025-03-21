@@ -144,7 +144,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         String response = sixRepo.getResponse(message);
 
         if(response.contains("unable") || response.contains("assist") || response.contains("queries")){
-            response = String.join(" ", geminiRepo.callGeminiAPI(message));
+            String rawResponse = String.join(" ", geminiRepo.callGeminiAPI(message));
+            response = rawResponse.substring(0,10);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
