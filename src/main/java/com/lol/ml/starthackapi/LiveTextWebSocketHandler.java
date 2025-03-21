@@ -32,8 +32,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     private static WebSocketSession session = null;
     PromptApiRepo promptApiRepo = new PromptApiRepo();
 
-    private final AtomicReference<String> textMessage = new AtomicReference<>("");
-    private final AtomicReference<String> voiceMessage = new AtomicReference<>("");
+    private static final AtomicReference<String> textMessage = new AtomicReference<>("");
+    private static final AtomicReference<String> voiceMessage = new AtomicReference<>("");
 
     private ConversationProcessor conversationProcessor = new ConversationProcessor();
 
