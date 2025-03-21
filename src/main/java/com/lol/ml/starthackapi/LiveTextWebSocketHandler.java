@@ -216,6 +216,40 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    @Scheduled(fixedRate = 6000, initialDelay = 6000)
+    private void returnExplanation (){
+        if(session == null || !session.isOpen()){
+            return;
+        }
+
+        String currentVoiceMessage = voiceMessage.getAndSet(""); // Get and reset safely
+
+        System.out.println("voice: " + currentVoiceMessage);
+
+        String toGemini = "You are chatting with a Wealth Manager, so please only answer the following " +
+                "prompt only if it has something to do with finances. If that is not the case you should always respond" +
+                "Gathering Information. -> Prompt: We would like you to give us really short and precise background" +
+                "information on the most important keywords that you can find in the following: " + currentVoiceMessage;
+
+        List<String> geminiResponse = promptApiRepo.callGeminiAPI(toGemini);
+
+        String combinedString = String.join(" ", geminiResponse);
+
+        if(currentVoiceMessage.isBlank()){
+            combinedString = "Gathering Information";
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString;
+        try {
+            jsonString = objectMapper.writeValueAsString(Map.of("content", combinedString, "tag", "explanation"));
+            System.out.println(jsonString);
+            sendMessageToClient(jsonString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Scheduled(fixedRate = 15000, initialDelay = 15000)
     private void returnPrediction (){
         if(session == null || !session.isOpen()){
