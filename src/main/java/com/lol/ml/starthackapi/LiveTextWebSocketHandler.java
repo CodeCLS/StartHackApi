@@ -115,6 +115,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
                     // Use Gemini API for other queries
                     response = String.join("\n", geminiRepo.callGeminiAPI(conversation));
+                    System.out.println("118" + response);
+
                 }
 
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -128,7 +130,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
                     System.out.println(jsonString);
                     sendMessageToClient(jsonString);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    System.out.println(133 + e.getMessage());
                 }
 
 
