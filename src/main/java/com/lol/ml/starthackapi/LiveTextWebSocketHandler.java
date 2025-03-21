@@ -83,7 +83,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         //conversationProcessor.addWord(sessionId, word);
 
         if(channel.equals("text")) {
-            //checkAndProcessConversation(content);
+            checkAndProcessConversation(content);
         } else {
             voiceMessage.updateAndGet(v -> v + " " + content);
         }
@@ -91,59 +91,72 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         System.out.println("62"  + jsonNode + "textMe " +textMessage + "Voice " + voiceMessage + " " + channel + " " + content);
     }
 
-    private void checkAndProcessConversation(String message) throws Exception {
-        String sessionId = session.getId();
+//    private void checkAndProcessConversation(String message) throws Exception {
+//        String sessionId = session.getId();
+//
+//        System.out.println("100");
+//
+//        if (conversationProcessor.shouldProcessConversation(sessionId)) {
+//            System.out.println("101");
+//            String conversation = conversationProcessor.getConversation(sessionId);
+//
+//            if (!conversation.isEmpty()) {
+//                System.out.println("109" + conversation);
+//
+//                String response;
+//                if (conversationProcessor.isFinancialQuery(conversation)) {
+//                    // Use SIX API for financial queries
+//                    response = sixRepo.getResponse(conversation);
+//                    System.out.println("109");
+//
+//                } else {
+//                    System.out.println("110");
+//
+//                    // Use Gemini API for other queries
+//                    response = String.join("\n", geminiRepo.callGeminiAPI(conversation));
+//                    System.out.println("118" + response);
+//
+//                }
+//
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                String jsonString;
+//                System.out.println("120");
+//
+//                try {
+//                    System.out.println("123");
+//
+//                    jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "chat"));
+//                    System.out.println(jsonString);
+//                    sendMessageToClient(jsonString);
+//                } catch (IOException e) {
+//                    System.out.println(133 + e.getMessage());
+//                }
+//
+//
+//
+//                // Clear the conversation after processing
+//                conversationProcessor.clearConversation(sessionId);
+//            }
+//        }
+//    }
 
-        System.out.println("100");
+    private void checkAndProcessConversation (String message){
+        String response = sixRepo.getResponse(message);
 
-        if (conversationProcessor.shouldProcessConversation(sessionId)) {
-            System.out.println("101");
-            String conversation = conversationProcessor.getConversation(sessionId);
+        if(response.contains("unable") || response.contains("assist") || response.contains("queries")){
+            response = String.join(" ", geminiRepo.callGeminiAPI(message));
+        }
 
-            if (!conversation.isEmpty()) {
-                System.out.println("109" + conversation);
-
-                String response;
-                if (conversationProcessor.isFinancialQuery(conversation)) {
-                    // Use SIX API for financial queries
-                    response = sixRepo.getResponse(conversation);
-                    System.out.println("109");
-
-                } else {
-                    System.out.println("110");
-
-                    // Use Gemini API for other queries
-                    response = String.join("\n", geminiRepo.callGeminiAPI(conversation));
-                    System.out.println("118" + response);
-
-                }
-
-                ObjectMapper objectMapper = new ObjectMapper();
-                String jsonString;
-                System.out.println("120");
-
-                try {
-                    System.out.println("123");
-
-                    jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "chat"));
-                    System.out.println(jsonString);
-                    sendMessageToClient(jsonString);
-                } catch (IOException e) {
-                    System.out.println(133 + e.getMessage());
-                }
-
-
-
-                // Clear the conversation after processing
-                conversationProcessor.clearConversation(sessionId);
-            }
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString;
+        try {
+            jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "chat"));
+            System.out.println(jsonString);
+            sendMessageToClient(jsonString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
-
-//    private void checkAndProcessConversation (String message){
-//        String sixResponse = sixRepo.getResponse(message);
-//        String geminiResponse = String.join(" ", geminiRepo.callGeminiAPI(message));
-//    }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
