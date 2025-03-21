@@ -21,6 +21,7 @@ import java.util.Map;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 @EnableScheduling
 @Component
@@ -31,8 +32,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     private static WebSocketSession session = null;
     PromptApiRepo promptApiRepo = new PromptApiRepo();
 
-    private String textMessage = "";
-    private String voiceMessage = "";
+    private final AtomicReference<String> textMessage = new AtomicReference<>("");
+    private final AtomicReference<String> voiceMessage = new AtomicReference<>("");
 
     private ConversationProcessor conversationProcessor = new ConversationProcessor();
 
@@ -84,7 +85,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         if(channel.equals("text")) {
             //checkAndProcessConversation(content);
         } else {
-            voiceMessage = voiceMessage + " " + content;
+            voiceMessage.updateAndGet(v -> v + " " + content);
         }
 
         System.out.println("62"  + jsonNode + "textMe " +textMessage + "Voice " + voiceMessage + " " + channel + " " + content);
@@ -199,12 +200,13 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
-        System.out.println("voice" + voiceMessage);
-        String toGemini = "We would like you to make a Prediction of the next Question our customer could" +
-                "ask us. If possible it should be in the financial context. Please keep it as shortly and precisely" +
-                "as possible. Here is a snipped of our last conversation: " + voiceMessage;
+        String currentVoiceMessage = voiceMessage.getAndSet(""); // Get and reset safely
 
-        voiceMessage = "";
+        System.out.println("voice: " + currentVoiceMessage);
+
+        String toGemini = "We would like you to make a Prediction of the next Question our customer could" +
+                " ask us. If possible it should be in the financial context. Please keep it as short and precise" +
+                " as possible. Here is a snippet of our last conversation: " + currentVoiceMessage;
 
         List<String> geminiResponse = promptApiRepo.callGeminiAPI(toGemini);
 
