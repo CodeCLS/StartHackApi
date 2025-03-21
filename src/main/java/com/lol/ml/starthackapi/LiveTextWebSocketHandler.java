@@ -87,7 +87,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
             voiceMessage = voiceMessage + " " + content;
         }
 
-        System.out.println("62"  + jsonNode + " " +textMessage + " " + voiceMessage + " " + channel + " " + content);
+        System.out.println("62"  + jsonNode + "textMe " +textMessage + "Voice " + voiceMessage + " " + channel + " " + content);
     }
 
     private void checkAndProcessConversation(String message) throws Exception {
