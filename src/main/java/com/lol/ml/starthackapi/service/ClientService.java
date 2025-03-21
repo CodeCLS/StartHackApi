@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Service
 public class ClientService {
-    private Map<String, Client> mockClients = new HashMap<>();
+    private final Map<String, Client> mockClients = new HashMap<>();
 
     public ClientService() {
         // Mock client data

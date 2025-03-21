@@ -10,6 +10,8 @@ import java.io.IOException;
 @Repository
 public class SixRepo {
 
+
+
     private static String SIX_GPT_URL = "https://idchat-api-containerapp01-dev.orangepebble-16234c4b."
             + "switzerlandnorth.azurecontainerapps.io/query?query=";
 

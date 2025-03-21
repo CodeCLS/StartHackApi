@@ -33,17 +33,13 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     private String textMessage = "";
     private String voiceMessage = "";
 
-    @Autowired
-    private ConversationProcessor conversationProcessor;
+    private ConversationProcessor conversationProcessor = new ConversationProcessor();
 
-    @Autowired
-    private ClientService clientService;
+    private ClientService clientService = new ClientService();
 
-    @Autowired
-    private PromptApiRepo geminiRepo;
+    private PromptApiRepo geminiRepo = new PromptApiRepo();
 
-    @Autowired
-    private SixRepo sixRepo;
+    private SixRepo sixRepo = new SixRepo();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -66,8 +62,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         }, 0, 1, TimeUnit.SECONDS);
 
         //
-        //sessions.remove(sessionId);
-        conversationProcessor.clearConversation(sessionId);
+
 
         //String json = "{\"channel\": \"textchannel\", \"content\": \"textcontent\"}";
 
@@ -131,6 +126,8 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         System.out.println("Connection to session " + session.getId() + " closed.");
         LiveTextWebSocketHandler.session = null;
+        sessions.remove(session.getId());
+        conversationProcessor.clearConversation(session.getId());
 
     }
 
