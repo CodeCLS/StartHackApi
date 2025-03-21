@@ -23,7 +23,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 @Component
 public class LiveTextWebSocketHandler extends TextWebSocketHandler {
-    private static final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 
@@ -46,20 +45,11 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         LiveTextWebSocketHandler.session = session;
         System.out.println("Connection to session " + session.getId() + " established.");
         String sessionId = session.getId();
-        sessions.put(sessionId, session);
 
         // Send mock client info
         JSONObject clientInfo = new JSONObject(clientService.getClientById("client1"));
         session.sendMessage(new TextMessage(clientInfo.toString()));
 
-        // Schedule conversation checking
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                checkAndProcessConversation(sessionId);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, 0, 1, TimeUnit.SECONDS);
 
         //
 
@@ -111,10 +101,17 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
                     response = String.join("\n", geminiRepo.callGeminiAPI(conversation));
                 }
 
-                WebSocketSession session = sessions.get(sessionId);
-                if (session != null && session.isOpen()) {
-                    session.sendMessage(new TextMessage(response));
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonString;
+                try {
+                    jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "explained"));
+                    System.out.println(jsonString);
+                    sendMessageToClient(jsonString);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
+
+
 
                 // Clear the conversation after processing
                 conversationProcessor.clearConversation(sessionId);
@@ -126,7 +123,6 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         System.out.println("Connection to session " + session.getId() + " closed.");
         LiveTextWebSocketHandler.session = null;
-        sessions.remove(session.getId());
         conversationProcessor.clearConversation(session.getId());
 
     }
@@ -137,6 +133,15 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         if (session != null && session.isOpen()) {
             session.sendMessage(new TextMessage(message));
         }
+    }
+    @Scheduled(fixedRate = 15000, initialDelay = 15000)
+    private void returnExplained(){
+        try {
+            checkAndProcessConversation(session.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Scheduled(fixedRate = 15000, initialDelay = 15000)
