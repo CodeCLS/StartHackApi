@@ -39,10 +39,12 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     private PromptApiRepo geminiRepo = new PromptApiRepo();
 
     private SixRepo sixRepo = new SixRepo();
+    String sessionId = null;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         this.session = session;
+        sessionId = session.getId();
         System.out.println("Connection to session " + session.getId() + " established.");
 
 
@@ -126,9 +128,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        System.out.println("Connection to session " + session.getId() + " closed.");
+        System.out.println("Connection to session " + sessionId + " closed.");
         LiveTextWebSocketHandler.session = null;
-        conversationProcessor.clearConversation(session.getId());
+        conversationProcessor.clearConversation(sessionId);
+        sessionId = null;
 
     }
 
@@ -142,7 +145,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     @Scheduled(fixedRate = 15000, initialDelay = 15000)
     private void returnExplained(){
         try {
-            checkAndProcessConversation(session.getId());
+            checkAndProcessConversation(sessionId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
