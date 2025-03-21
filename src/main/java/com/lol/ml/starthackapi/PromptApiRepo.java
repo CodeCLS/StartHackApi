@@ -4,17 +4,18 @@ import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Component
 public class PromptApiRepo {
 
     @Value("${gemini.api.key}")  // Load API key from application.properties
-    private String apiKey;
+    private String apiKey = "AIzaSyDPxUmsa3vR7PMEaeG0abwGI6YI_MSMq9Q";
 
     private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
     private static final OkHttpClient client = new OkHttpClient();
@@ -33,9 +34,13 @@ public class PromptApiRepo {
                 .url(fullUrl)
                 .post(body)
                 .build();
+        System.out.println("36I");
+
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
+                System.out.println("41I");
+
                 throw new RuntimeException("API Error: " + response.code() + " - " + response.message());
             }
 
@@ -43,6 +48,7 @@ public class PromptApiRepo {
             String jsonResponse = response.body().string();
             JSONObject jsonObject = new JSONObject(jsonResponse);
             List<String> outputChunks = new ArrayList<>();
+            System.out.println("50I");
 
             // Extract AI-generated text
             JSONArray candidates = jsonObject.getJSONArray("candidates");
@@ -50,8 +56,11 @@ public class PromptApiRepo {
                 JSONObject firstCandidate = candidates.getJSONObject(0);
                 JSONObject content = firstCandidate.getJSONObject("content");
                 JSONArray parts = content.getJSONArray("parts");
+                System.out.println("58I");
 
                 if (parts.length() > 0) {
+                    System.out.println("41I");
+
                     String aiResponse = parts.getJSONObject(0).getString("text");
 
                     // Split response into sentences for chunking
@@ -62,6 +71,8 @@ public class PromptApiRepo {
                         output.append(chunk);
 
                     }
+                    System.out.println("80I");
+
                     String importance = determineImportance("");
                     String formattedChunk = "{type: \"text\", importance: \"" + importance + "\", content: \"" + output.toString() + "\"}";
                     outputChunks.add(formattedChunk);
@@ -70,6 +81,8 @@ public class PromptApiRepo {
 
             return outputChunks;
         } catch (Exception e) {
+            System.out.println("51I " + e.getMessage());
+
             throw new RuntimeException("Error calling Gemini API: " + e.getMessage());
         }
     }
