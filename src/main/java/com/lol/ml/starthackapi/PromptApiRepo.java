@@ -4,17 +4,18 @@ import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Component
 public class PromptApiRepo {
 
     @Value("${gemini.api.key}")  // Load API key from application.properties
-    private String apiKey;
+    private String apiKey = "AIzaSyDPxUmsa3vR7PMEaeG0abwGI6YI_MSMq9Q";
 
     private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
     private static final OkHttpClient client = new OkHttpClient();
