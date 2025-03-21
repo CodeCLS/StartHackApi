@@ -130,14 +130,18 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
 
     private void checkAndProcessConversation (String message){
         System.out.println("Una12ble312 to assist");
+        String rawResponse;
+        String response;
 
-        String response = sixRepo.getResponse(message);
+        rawResponse = sixRepo.getResponse(message);
 
-        if(response.contains("unable") || response.contains("assist") || response.contains("queries") || response.contains("Error")){
+        if(rawResponse.contains("unable") || rawResponse.contains("assist") || rawResponse.contains("queries") || rawResponse.contains("Error")){
             System.out.println("Unable to assist");
-            String rawResponse = String.join(" ", geminiRepo.callGeminiAPI(message));
+            response = String.join(" ", geminiRepo.callGeminiAPI(message));
+        } else {
             response = rawResponse.substring(0,10);
         }
+
         System.out.println("Una12ble to assist");
 
 
