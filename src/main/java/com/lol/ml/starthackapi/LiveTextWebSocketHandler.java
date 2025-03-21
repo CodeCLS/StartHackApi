@@ -1,11 +1,55 @@
 package com.lol.ml.starthackapi;
 
+<<<<<<< HEAD
+import org.springframework.beans.factory.annotation.Autowired;
+=======
 import org.springframework.scheduling.annotation.Scheduled;
+>>>>>>> 8a93245564068652ed412c4a68f4d9463240a6bf
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+<<<<<<< HEAD
+import com.lol.ml.starthackapi.service.*;
+import org.json.JSONObject;
+import java.util.concurrent.*;
+
+@Component
+public class LiveTextWebSocketHandler extends TextWebSocketHandler {
+    private static final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    @Autowired
+    private ConversationProcessor conversationProcessor;
+
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private PromptApiRepo geminiRepo;
+
+    @Autowired
+    private SixRepo sixRepo;
+
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        String sessionId = session.getId();
+        sessions.put(sessionId, session);
+
+        // Send mock client info
+        JSONObject clientInfo = new JSONObject(clientService.getClientById("client1"));
+        session.sendMessage(new TextMessage(clientInfo.toString()));
+
+        // Schedule conversation checking
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                checkAndProcessConversation(sessionId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+=======
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,10 +73,50 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         LiveTextWebSocketHandler.session = session;
         System.out.println("Connection to session " + session.getId() + " established.");
 
+>>>>>>> 8a93245564068652ed412c4a68f4d9463240a6bf
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+<<<<<<< HEAD
+        String sessionId = session.getId();
+        String word = message.getPayload();
+
+        // Process word by word
+        conversationProcessor.addWord(sessionId, word);
+    }
+
+    private void checkAndProcessConversation(String sessionId) throws Exception {
+        if (conversationProcessor.shouldProcessConversation(sessionId)) {
+            String conversation = conversationProcessor.getConversation(sessionId);
+
+            if (!conversation.isEmpty()) {
+                String response;
+                if (conversationProcessor.isFinancialQuery(conversation)) {
+                    // Use SIX API for financial queries
+                    response = sixRepo.getResponse(conversation);
+                } else {
+                    // Use Gemini API for other queries
+                    response = String.join("\n", geminiRepo.callGeminiAPI(conversation));
+                }
+
+                WebSocketSession session = sessions.get(sessionId);
+                if (session != null && session.isOpen()) {
+                    session.sendMessage(new TextMessage(response));
+                }
+
+                // Clear the conversation after processing
+                conversationProcessor.clearConversation(sessionId);
+            }
+        }
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        String sessionId = session.getId();
+        sessions.remove(sessionId);
+        conversationProcessor.clearConversation(sessionId);
+=======
         String payload = message.getPayload();
 
         //String json = "{\"channel\": \"textchannel\", \"content\": \"textcontent\"}";
@@ -64,6 +148,7 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
         if (session != null && session.isOpen()) {
             session.sendMessage(new TextMessage(message));
         }
+>>>>>>> 8a93245564068652ed412c4a68f4d9463240a6bf
     }
 
     @Scheduled(fixedRate = 15000, initialDelay = 15000)

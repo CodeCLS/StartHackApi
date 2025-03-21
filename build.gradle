@@ -2,6 +2,11 @@ plugins {
     id 'org.springframework.boot' version '3.1.0'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'java'
+<<<<<<< HEAD
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+=======
+>>>>>>> 8a93245564068652ed412c4a68f4d9463240a6bf
 }
 group = 'com.lol.ml'
 version = '0.0.1-SNAPSHOT'
@@ -12,7 +17,7 @@ bootJar {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21)) // Change to your version
+        languageVersion.set(JavaLanguageVersion.of(19))
     }
 }
 
@@ -24,6 +29,13 @@ configurations.configureEach {
 }
 
 dependencies {
+<<<<<<< HEAD
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'org.json:json:20240303'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+=======
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -38,6 +50,7 @@ dependencies {
     implementation ('org.springframework.boot:spring-boot-starter') {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
+>>>>>>> 8a93245564068652ed412c4a68f4d9463240a6bf
 }
 
 
