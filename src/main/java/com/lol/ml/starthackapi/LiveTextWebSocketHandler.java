@@ -97,7 +97,10 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void checkAndProcessConversation(String sessionId) throws Exception {
+        System.out.println("100");
+
         if (conversationProcessor.shouldProcessConversation(sessionId)) {
+            System.out.println("101");
             String conversation = conversationProcessor.getConversation(sessionId);
 
             if (!conversation.isEmpty()) {
@@ -105,14 +108,22 @@ public class LiveTextWebSocketHandler extends TextWebSocketHandler {
                 if (conversationProcessor.isFinancialQuery(conversation)) {
                     // Use SIX API for financial queries
                     response = sixRepo.getResponse(conversation);
+                    System.out.println("109");
+
                 } else {
+                    System.out.println("110");
+
                     // Use Gemini API for other queries
                     response = String.join("\n", geminiRepo.callGeminiAPI(conversation));
                 }
 
                 ObjectMapper objectMapper = new ObjectMapper();
                 String jsonString;
+                System.out.println("120");
+
                 try {
+                    System.out.println("123");
+
                     jsonString = objectMapper.writeValueAsString(Map.of("content", response, "tag", "chat"));
                     System.out.println(jsonString);
                     sendMessageToClient(jsonString);
